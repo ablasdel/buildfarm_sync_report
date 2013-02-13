@@ -5,8 +5,10 @@ To use this script execute the following:
 
 python syncdiff.py *beforefile* *afterfile*
 
-What follows is an example output for syncdiff run on the following files:For an example of the functionality run the syncdiff script on these two files:
+What follows is an example output for syncdiff run on the following files: (if viewing in github view in raw for real results)
+
 http://packages.ros.org/ros/ubuntu/dists/precise/main/binary-amd64/Packages
+
 http://packages.ros.org/ros-shadow-fixed/ubuntu/dists/precise/main/binary-amd64/Packages
 
 
