@@ -13,7 +13,7 @@ def main():
     fromlines = open(files[0], 'U').readlines()
     tolines = open(files[1], 'U').readlines()
     diff = difflib.unified_diff(fromlines, tolines, files[0], files[1], n=5)
-    diff = [l for l in diff if ('Version:' in l or 'Package:' in l)]
+    diff = [l for l in diff if ('Version:' == l[1:9] or 'Package:' == l[1:9])]
 
     added_packages = {}
     removed_packages = {}
@@ -24,10 +24,10 @@ def main():
     current_version = None
     current_version_mod = None
     for line in diff:
-        if 'Package:' in line:
+        if 'Package:' == line[1:9]:
             current_package = line[line.index(':') + 2:-1]
             current_package_mod = line[0]
-        elif 'Version:' in line:
+        elif 'Version:' == line[1:9]:
             current_version = line[line.index(':') + 2:-1]
             current_version_mod = line[0]
             if current_package_mod is ' ':
