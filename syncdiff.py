@@ -28,16 +28,17 @@ def main():
             current_package = line[line.index(':') + 2:-1]
             current_package_mod = line[0]
         elif 'Version:' == line[1:9]:
-            current_version = line[line.index(':') + 2:-1]
+            current_version = version(line[line.index(':') + 2:-1])
             current_version_mod = line[0]
             if current_package_mod is ' ':
-                if current_package in versioned_packages:
-                    versioned_packages[current_package].append(current_version)
-                    versioned_packages[current_package].sort()
-                    if len(versioned_packages[current_package]) > 2:
-                        raise Exception(current_package + ": more than 2 ver")
+                if current_package not in versioned_packages:
+                    versioned_packages[current_package] = [None, None]
+                if current_version_mod == '-':
+                    versioned_packages[current_package][0] = current_version
+                elif current_version_mod == '+':
+                    versioned_packages[current_package][1] = current_version
                 else:
-                    versioned_packages[current_package] = [current_version]
+                    pass  # Diff static, Version not changed, ignore
             elif current_package_mod is '+':
                 if current_version_mod is not '+':
                     raise Exception(current_package + " add package odd ver")
@@ -72,8 +73,16 @@ def main():
     print "\nPackages Updated: "
     for line in sorted(versioned_packages):
         print_package = versioned_packages[line]
-        if len(print_package) == 2:
+        if len(print_package) == 2 and print_package[0] != print_package[1]:
             print line, ':', print_package[0], '->', print_package[1]
+
+
+def version(full_string):
+    sectioned = full_string.split('-', 2)
+    version_number = sectioned[0]
+    if sectioned[1].isdigit():
+        version_number = version_number + '-' + sectioned[1]
+    return version_number
 
 if __name__ == '__main__':
     main()
