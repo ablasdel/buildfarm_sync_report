@@ -1,11 +1,8 @@
 import difflib
 import argparse
 
-from datetime import datetime
-
 
 def main():
-    a = datetime.now()
     usage = "usage: %prog fromfile tofile"
     parser = argparse.ArgumentParser(usage)
     parser.add_argument('fromfile', type=str, nargs='+', default=None)
@@ -61,22 +58,22 @@ def main():
                     versioned_packages[current_package].sort()
                 else:
                     removed_packages[current_package] = current_version
+            else:
+                raise Exception("Erronious character: " + current_package_mod)
         else:
             raise Exception("Erronious line found: " + line)
 
+    print "\nPackages Added: "
     for line in sorted(added_packages):
-        print 'New Package Added:', line, ':', added_packages[line]
+        print line, ':', added_packages[line]
+    print "\nPackages Removed: "
     for line in sorted(removed_packages):
-        print 'Old Package Removed', line, ':', removed_packages[line]
+        print line, ':', removed_packages[line]
+    print "\nPackages Updated: "
     for line in sorted(versioned_packages):
         print_package = versioned_packages[line]
         if len(print_package) == 2:
             print line, ':', print_package[0], '->', print_package[1]
-
-    b = datetime.now()
-    c = b - a
-    seconds = float(c.seconds) + float(c.microseconds) / 1000000
-    print 'Algorithm took ', seconds, ' seconds.'
 
 if __name__ == '__main__':
     main()
